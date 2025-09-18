@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>XCL to OBJ Exporter</title>
+</head>
+<body>
+  <h1>XCL Collision to OBJ Exporter</h1>
+  <input type="file" id="fileInput" />
+  <button id="exportBtn" disabled>Export OBJ</button>
+  <div id="log"></div>
+
+<script>
+function lzssDecompress(data) { // my teribble implementation
+  const output = [];
+  let p = 4, op = 0, mask = 0, flag = 0;
+  while (p < data.length) {
+    if (mask === 0) { flag = data[p++]; mask = 0x80; }
+    if ((flag & mask) === 0) { output.push(data[p++]); op++; } 
+    else {
+      if (p + 1 >= data.length) break;
+      const dat = (data[p]<<8)|data[p+1]; p+=2;
+      const pos = (dat & 0x0FFF) + 1;
+      const length = (dat >> 12) + 3;
+      for(let i=0;i<length;i++) { output.push(op-pos>=0?output[op-pos]:0); op++; }
+    }
+    mask >>= 1;
+  }
+  return new Uint8Array(output);
+}
+
+function readLE32(buf, off){ return buf[off]|(buf[off+1]<<8)|(buf[off+2]<<16)|(buf[off+3]<<24); } // cant even make my code clear smh
+function readF32(buf, off){ return new DataView(buf.buffer).getFloat32(off,true); }
+
+function decompressXCL(data) { // xcl? More like, uh...
+  if (data.length < 4) throw new Error("File too small for XCL header"); // ...yeah. - by woganog :D
+  const header = data.subarray(0,4); // Excel - by doggo who proceeded to suggest we all become comp excel users :sob: (my next project frfr)
+  const method = header[0] & 0x7;
+  const size = ((header[0] >> 3) | (header[1] << 5) | (header[2] << 13) | (header[3] << 21)) >>> 0;
+
+  if (method === 0) return data.subarray(4);       // raw
+  else if (method === 1) return lzssDecompress(data); // LZSS
+  else throw new Error(`Unsupported compression method ${method}. Only raw (0) and LZSS (1) are supported for now.`);
+}
+
+function parseXCL(decomp){
+  const vertices=[], indices=[], log=[];
+  const vertOffset=readLE32(decomp,8); 
+  log.push(`Vertex array offset 0x${vertOffset.toString(16)}`);
+  let off=vertOffset;
+
+  // Parse all vertices until out-of-bounds or unreasonable coordinate
+  while(off+12<=decomp.length){
+    const x=readF32(decomp,off),y=readF32(decomp,off+4),z=readF32(decomp,off+8);
+    if(Math.abs(x)>10000||Math.abs(y)>10000||Math.abs(z)>10000) break;
+    vertices.push([x,y,z]); off+=12;
+  }
+  log.push(`Parsed ${vertices.length} vertices`);
+
+  // Parse triangles
+  while(off+6<=decomp.length){
+    const i0=decomp[off]|(decomp[off+1]<<8),
+          i1=decomp[off+2]|(decomp[off+3]<<8),
+          i2=decomp[off+4]|(decomp[off+5]<<8);
+    if(i0>=vertices.length||i1>=vertices.length||i2>=vertices.length) break;
+    indices.push([i0,i1,i2]); off+=6;
+  }
+  log.push(`Parsed ${indices.length} triangles`);
+  return {vertices, indices, log:log.join('\n')};
+}
+
+function exportOBJ(parsed){
+  let obj = '';
+  parsed.vertices.forEach(v => { obj += `v ${v[0]} ${v[1]} ${v[2]}\n`; });
+  parsed.indices.forEach(t => { obj += `f ${t[0]+1} ${t[1]+1} ${t[2]+1}\n`; });
+  obj += '# n123, hearty, light and math are goated!! except n123 isnt\n';
+  return obj;
+}
+
+
+document.getElementById('fileInput').addEventListener('change', async(ev)=>{
+  const file=ev.target.files[0]; 
+  if(!file) return;
+  const logDiv = document.getElementById('log');
+  logDiv.textContent = '';
+
+  try {
+    const buf=new Uint8Array(await file.arrayBuffer());
+    const decomp = decompressXCL(buf);
+    const parsed = parseXCL(decomp);
+    logDiv.textContent = parsed.log;
+
+    const btn=document.getElementById('exportBtn');
+    btn.disabled=false;
+    btn.onclick=()=>{
+      const objText = exportOBJ(parsed);
+      const blob = new Blob([objText],{type:'text/plain'});
+      const a = document.createElement('a'); 
+      a.href = URL.createObjectURL(blob);
+      a.download = file.name+'.obj'; 
+      a.click();
+    };
+
+  } catch(err) {
+    logDiv.textContent = 'Error: ' + err.message;
+    document.getElementById('exportBtn').disabled = true;
+  }
+});
+</script>
+</body>
+</html>
