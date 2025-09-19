@@ -66,7 +66,7 @@ function parseXCL(decomp){
   const vertices = [], indices = [], log = [];
 
   const headerSize = 0x60; // for logging only
-  const vertexOffsetRel = readLE32(decomp, 0x08);
+  const vertexOffsetRel = 0x00; // readLE32(decomp, 0x08);
   const triOffsetRel = readLE32(decomp, 0x0C);
   const triEndRel = readLE32(decomp, 0x14);
 
