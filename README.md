@@ -1,5 +1,5 @@
 # yw-xcl
-A W.I.P reader (converts -> .obj) for Yo-kai Watch XCL (X Collision) files used in Yo-kai Watch Blasters onwards made in HTML. Download the `index.html` and open it with a web browser or go to [the website](https://n123git.github.io/yw-xcl). Random fact: an XCL cannot be larger than 536,870,911 bytes (~1/2GB)
+A W.I.P reader (converts -> .obj) for Yo-kai Watch XCL (X CoLlision/X Collision Layout) files used in Yo-kai Watch Blasters onwards, made in HTML. Download the `index.html` and open it with a web browser or go to [the website](https://n123git.github.io/yw-xcl). Random fact: an XCL cannot be larger than 536,870,911 bytes (~1/2GB) decompressed.
 
 ### Suppported Games
 * Yo-kai Watch 3
