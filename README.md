@@ -1,5 +1,5 @@
 # yw-xcl
-A W.I.P reader (converts -> .obj) for Yo-kai Watch XCL (X Collision) files used in Yo-kai Watch Blasters onwards made in HTML.
+A W.I.P reader (converts -> .obj) for Yo-kai Watch XCL (X Collision) files used in Yo-kai Watch Blasters onwards made in HTML. Download the `index.html` and open it with a web browser or go to [the website](https://n123git.github.io/yw-xcl)
 
 ## XCL Specification
 The purpose of the file format is listed above - it is used *exclusively for maps* and has no signature/magic.
