@@ -9,8 +9,16 @@
   <p>Source code and hosting is shown <a href="https://github.com/n123git/yw-xcl">on my github!</a></p>
   <input type="file" id="fileInput" />
   <button id="exportBtn" disabled>Export OBJ</button>
-  <div id="log"></div>
+  <label>
+  <input type="checkbox" id="showVertices" checked>
+  Show Vertices
+</label>
+<label>
+  <input type="checkbox" id="showTriangles" checked>
+  Show Triangles
+</label>
 
+  <div id="log"></div>
 <script>
 function lzssDecompress(data) { // my teribble implementation
   const output = [];
@@ -43,31 +51,44 @@ function decompressXCL(data) { // xcl? More like, uh...
   else if (method === 1) return lzssDecompress(data); // LZSS
   else throw new Error(`Unsupported compression method ${method}. Only raw (0) and LZSS (1) are supported for now.`);
 }
-
 function parseXCL(decomp){
-  const vertices=[], indices=[], log=[];
-  const vertOffset=readLE32(decomp,8); 
-  log.push(`Vertex array offset 0x${vertOffset.toString(16)}`);
-  let off=vertOffset;
+  const vertices = [], indices = [], log = [];
 
-  // Parse all vertices until out-of-bounds or unreasonable coordinate
-  while(off+12<=decomp.length){
-    const x=readF32(decomp,off),y=readF32(decomp,off+4),z=readF32(decomp,off+8);
-    if(Math.abs(x)>10000||Math.abs(y)>10000||Math.abs(z)>10000) break;
-    vertices.push([x,y,z]); off+=12;
+  const headerSize = 0x60;
+  const vertOffset = headerSize; 
+  const triOffset = readLE32(decomp, 0x0C) + headerSize;
+  const triEnd = readLE32(decomp, 0x14) + headerSize;
+
+  log.push(`Vertices start at 0x${vertOffset.toString(16)}`);
+  log.push(`Triangles start at 0x${triOffset.toString(16)}, end at 0x${triEnd.toString(16)}`);
+
+  // Parse vertices until triangle block starts
+  let off = vertOffset;
+  while(off + 12 <= decomp.length && off < triOffset){
+    const x = readF32(decomp, off),
+          y = readF32(decomp, off + 4),
+          z = readF32(decomp, off + 8);
+    vertices.push([x, y, z]);
+    off += 12;
   }
   log.push(`Parsed ${vertices.length} vertices`);
 
-  // Parse triangles
-  while(off+6<=decomp.length){
-    const i0=decomp[off]|(decomp[off+1]<<8),
-          i1=decomp[off+2]|(decomp[off+3]<<8),
-          i2=decomp[off+4]|(decomp[off+5]<<8);
-    if(i0>=vertices.length||i1>=vertices.length||i2>=vertices.length) break;
-    indices.push([i0,i1,i2]); off+=6;
+  // Parse triangles exactly within the block
+  off = triOffset;
+  while(off + 6 <= triEnd){
+    const i0 = decomp[off] | (decomp[off+1]<<8),
+          i1 = decomp[off+2] | (decomp[off+3]<<8),
+          i2 = decomp[off+4] | (decomp[off+5]<<8);
+
+    if(i0 < vertices.length && i1 < vertices.length && i2 < vertices.length){
+      indices.push([i0, i1, i2]);
+    }
+
+    off += 6; // always advance
   }
+
   log.push(`Parsed ${indices.length} triangles`);
-  return {vertices, indices, log:log.join('\n')};
+  return {vertices, indices, log: log.join('\n')};
 }
 
 function exportOBJ(parsed){
@@ -77,7 +98,6 @@ function exportOBJ(parsed){
   obj += '# n123, hearty, light and math are goated!! except n123 isnt\n';
   return obj;
 }
-
 
 document.getElementById('fileInput').addEventListener('change', async(ev)=>{
   const file=ev.target.files[0]; 
@@ -93,14 +113,32 @@ document.getElementById('fileInput').addEventListener('change', async(ev)=>{
 
     const btn=document.getElementById('exportBtn');
     btn.disabled=false;
-    btn.onclick=()=>{
-      const objText = exportOBJ(parsed);
-      const blob = new Blob([objText],{type:'text/plain'});
-      const a = document.createElement('a'); 
-      a.href = URL.createObjectURL(blob);
-      a.download = file.name+'.obj'; 
-      a.click();
-    };
+    document.getElementById('exportBtn').onclick = () => {
+  const showVertices = document.getElementById('showVertices').checked;
+  const showTriangles = document.getElementById('showTriangles').checked;
+
+  let objText = '';
+
+  if (showVertices) {
+    parsed.vertices.forEach(v => {
+      objText += `v ${v[0]} ${v[1]} ${v[2]}\n`;
+    });
+  }
+
+  if (showTriangles) {
+    parsed.indices.forEach(t => {
+      objText += `f ${t[0]+1} ${t[1]+1} ${t[2]+1}\n`;
+    });
+  }
+
+  objText += '# Exported by XCL exporter\n';
+
+  const blob = new Blob([objText], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = file.name + '.obj';
+  a.click();
+};
 
   } catch(err) {
     logDiv.textContent = 'Error: ' + err.message;
