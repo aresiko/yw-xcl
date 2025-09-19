@@ -4,9 +4,9 @@ A W.I.P reader (converts -> .obj) for Yo-kai Watch XCL (X CoLlision/X Collision 
 ### Suppported Games
 * Yo-kai Watch 3
 * Yo-kai Watch Busters 2
+* Yo-kai Watch Blasters
 
 ### Untested
-* Yo-kai Watch Blasters
 * Snack World
 
   ## XCL Specification
