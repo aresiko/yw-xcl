@@ -27,7 +27,7 @@ A W.I.P reader (converts -> .obj) for Yo-kai Watch XCL (X CoLlision/X Collision 
   Support for other compression types will roll out next update (hopefully)
   ### Decompressed XCL
   * Header (`0x00`-`0x5F`)
-    * `0x00` (uint32): Main Metadata (Version num?) - usually `0x00000001`.
+    * `0x00` (uint32): Main Metadata (Version num?) - usually `0x00000001` or `0x00000100`.
     * `0x08` (uint32):  Offset to the start of the vertice block?, starting from AFTER the header (so the offset given is the actual offset - `0x60`). This is usually just `0x00000000`.
     * `0x0C` (uint32): Offset to the start of the main triangle (not vertices!) block; this is also starting from AFTER the header (so the offset given is the actual offset - `0x60`).
     * `0x14` (uint32): Offset to the end of the main triangle block, relative to the start of the vertex block.
