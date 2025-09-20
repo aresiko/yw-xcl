@@ -30,7 +30,7 @@ A W.I.P reader (converts -> .obj) for Yo-kai Watch XCL (X CoLlision/X Collision 
     * `0x00` (uint32): Main Metadata (Version num?) - usually `0x00000001` or `0x00000100`.
     * `0x08` (uint32):  Offset to the start of the vertice block?, starting from AFTER the header (so the offset given is the actual offset - `0x60`). This is usually just `0x00000000`.
     * `0x0C` (uint32): Offset to the start of the main triangle (not vertices!) block; this is also starting from AFTER the header (so the offset given is the actual offset - `0x60`).
-    * `0x14` (uint32): Offset to the end of the main triangle block, relative to the start of the vertex block.
+    * `0x14` (uint32): Offset to the end of the main triangle block, relative to the headerk <!-- start of vertex block? -->.
     * Any offsets not described here are because they're purpose is currently unknown! I will work on expanding this as time passess but 96 bytes is alot for this!
   * Vertex Array (Vertice Block)
     * Location is usually `0x60` onwards. But the actual location depends - read the header section for more info.
