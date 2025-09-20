@@ -1,6 +1,12 @@
 # yw-xcl
 A W.I.P reader (converts -> .obj) for Yo-kai Watch XCL (X CoLlision/X Collision Layout) files used in Yo-kai Watch Blasters onwards, made in HTML. Download the `index.html` and open it with a web browser or go to [the website](https://n123git.github.io/yw-xcl). Random fact: an XCL cannot be larger than 536,870,911 bytes (~1/2GB) decompressed.
 
+Notes:
+* The XCL Parser currently has 2 major bugs:
+  * For a rare quantity of map files the parser will over-read the verticies causing spill over and NaN coords which at best will add extra rubbish points and at worst will corrupt the export unless the NaN verticies are manually removed i.e. in notepad
+  * For an annoyingly large number of XCLs only the verticies (not triangles) will be found causing the points to be exported but not "the connections".
+
+Both of these are high-priority and will be fixed asap.
 ### Suppported Games
 * Yo-kai Watch 3
 * Yo-kai Watch Busters 2
