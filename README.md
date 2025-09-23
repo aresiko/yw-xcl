@@ -2,11 +2,9 @@
 A W.I.P reader (converts -> .obj) for Yo-kai Watch XCL (X CoLlision/X Collision Layout) files used in Yo-kai Watch Blasters onwards, made in HTML. Download the `index.html` and open it with a web browser or go to [the website](https://n123git.github.io/yw-xcl). Random fact: an XCL cannot be larger than 536,870,911 bytes (~1/2GB) decompressed.
 
 Notes:
-* The XCL Parser currently has 2 major bugs:
-  * For a rare quantity of map files the parser will over-read the verticies causing spill over and NaN coords which at best will add extra rubbish points and at worst will corrupt the export unless the NaN verticies are manually removed i.e. in notepad
-  * For an annoyingly large number of XCLs only the verticies (not triangles) will be found causing the points to be exported but not "the connections".
+* The XCL Parser currently has a minor bug:
+  * For a small number of XCLs one or two triangles wont be picked up - this is currently being worked on!
 
-Both of these are high-priority and will be fixed asap.
 ### Suppported Games
 * Yo-kai Watch 3
 * Yo-kai Watch Busters 2
@@ -32,14 +30,15 @@ Both of these are high-priority and will be fixed asap.
   * The rest is the compressed payload - nothing special lol :P
   Support for other compression types will roll out next update (hopefully)
   ### Decompressed XCL
-  * Header (`0x00`-`0x5F`)
+  * Header (`0x00`-`0x5F`)? - size unconfirmed for now.
     * `0x00` (uint32): Main Metadata (Version num?) - usually `0x00000001` or `0x00000100`.
-    * `0x08` (uint32):  Offset to the start of the vertice block?, starting from AFTER the header (so the offset given is the actual offset - `0x60`). This is usually just `0x00000000`.
+    * `0x08` (uint32):  Offset to the start of the vertice block.
     * `0x0C` (uint32): Offset to the start of the main triangle (not vertices!) block; this is also starting from AFTER the header (so the offset given is the actual offset - `0x60`).
-    * `0x14` (uint32): Offset to the end of the main triangle block, relative to the headerk <!-- start of vertex block? -->.
-    * Any offsets not described here are because they're purpose is currently unknown! I will work on expanding this as time passess but 96 bytes is alot for this!
+    * `0x4C` (uint32): Usually (for smaller maps) this stores the length (in bytes) of the vertex array. Sometimes this is `00 00 00 00`; in that case the below offset stores it.
+    * `0x58` (uint32): Stores the length (in bytes) of the vertex array when `0x4C` is `00 00 00 00`.
+    * <!-- `0x14` (uint32): Offset -->
   * Vertex Array (Vertice Block)
-    * Location is usually `0x60` onwards. But the actual location depends - read the header section for more info.
+    * Location is usually `0xC0` or `0xA4` onwards. But the actual location is stored in the header - read the header section for more info.
     * Each vertex consists of **3 consecutive 32-bit floats** (`x, y, z`) for its position in 3D space.
   * Triangle Array (Main Triangle Block)
     * Location: Depends; look at the header section for more info.
