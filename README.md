@@ -41,9 +41,8 @@ Notes:
     * Location is usually `0xC0` or `0xA4` onwards. But the actual location is stored in the header - read the header section for more info.
     * Each vertex consists of **3 consecutive 32-bit floats** (`x, y, z`) for its position in 3D space.
   * Triangle Array (Main Triangle Block)
-    * Location: Depends; look at the header section for more info.
+    * Location: Directly after the Vertex Array.
     * Triangle size: 6 bytes per triangle - each triangle is composed of 3 consecutive verticie indexs (uint16)
-
 
 --- 
 
