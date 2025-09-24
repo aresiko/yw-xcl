@@ -124,7 +124,7 @@ function parseXCL(decomp){
   const vertDataEnd = mainaddr + len;
 
   const triOffsetRel = vertDataEnd;
-  const triEndRel = triOffsetRel + len; //readLE32(decomp, 0x14); // I havent fully found out where this is - but this is a safe bet; it will skip a few but ill fix it later
+  const triEndRel = readLE32(decomp, 0x78); //readLE32(decomp, 0x14); // test patch #01
 
   const triOffset = triOffsetRel;
   const triEnd = triEndRel;
