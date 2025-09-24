@@ -33,9 +33,9 @@ Notes:
   * Header (`0x00`-`0x5F`)? - size unconfirmed for now.
     * `0x00` (uint32): Main Metadata (Version num?) - usually `0x00000001` or `0x00000100`.
     * `0x08` (uint32):  Offset to the start of the vertice block.
-    * `0x0C` (uint32): Offset to the start of the main triangle (not vertices!) block; this is also starting from AFTER the header (so the offset given is the actual offset - `0x60`).
     * `0x4C` (uint32): Usually (for smaller maps) this stores the length (in bytes) of the vertex array. Sometimes this is `00 00 00 00`; in that case the below offset stores it.
     * `0x58` (uint32): Stores the length (in bytes) of the vertex array when `0x4C` is `00 00 00 00`.
+    * `0x78` (uint32): Offset to the **end** of the Triangle array, **not** the length.
     * <!-- `0x14` (uint32): Offset -->
   * Vertex Array (Vertice Block)
     * Location is usually `0xC0` or `0xA4` onwards. But the actual location is stored in the header - read the header section for more info.
