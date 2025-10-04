@@ -44,4 +44,4 @@ A W.I.P reader (converts -> .obj) for Yo-kai Watch XCL (X CoLlision/X Collision 
 
 ## License
 
-* MIT License (I dont really need credit aslong as you dont implicitly or explicitly take credit for work that isnt yours >>:( ).
+* MIT License (Just dont take credit for work that isn't yours).
